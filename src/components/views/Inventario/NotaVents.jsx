@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
+import { useEffect, useState } from 'react';
 import api from '../../../api/apiServices';
 
 const NotaVentas = () => {

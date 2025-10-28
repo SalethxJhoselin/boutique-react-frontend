@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { Button, Input, Modal, Select, Spin, message } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Modal, Input, Button, Select, Spin, Upload, message } from 'antd';
+import { FaPlus } from 'react-icons/fa';
 import api from '../../../api/apiServices';
 
 const { Option } = Select;

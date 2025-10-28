@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'antd';
+import { Button, Modal } from 'antd';
+import { useEffect, useState } from 'react';
 import api from '../../../api/apiServices';
 import CreateProduct from './CreateProduct';
 

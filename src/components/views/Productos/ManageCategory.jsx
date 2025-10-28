@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import InputModal from './InputModal';
+import { useEffect, useState } from 'react';
 import api from '../../../api/apiServices';
+import InputModal from './InputModal';
 
 const ManageCategory = () => {
     const [data, setData] = useState([]);
