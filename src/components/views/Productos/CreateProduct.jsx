@@ -2,9 +2,51 @@ import { Button, Input, Modal, Select, Spin, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FaPlus } from 'react-icons/fa';
-import api from '../../../api/apiServices';
 
 const { Option } = Select;
+
+// Datos de prueba para simular colores
+const mockColors = [
+    { id: 1, nombre: "Negro" },
+    { id: 2, nombre: "Blanco" },
+    { id: 3, nombre: "Rojo" },
+    { id: 4, nombre: "Azul" },
+    { id: 5, nombre: "Verde" },
+    { id: 6, nombre: "Gris" }
+];
+
+// Datos de prueba para simular tallas
+const mockSizes = [
+    { id: 1, nombre: "XS" },
+    { id: 2, nombre: "S" },
+    { id: 3, nombre: "M" },
+    { id: 4, nombre: "L" },
+    { id: 5, nombre: "XL" },
+    { id: 6, nombre: "XXL" }
+];
+
+// Datos de prueba para simular marcas
+const mockBrands = [
+    { id: 1, nombre: "Nike" },
+    { id: 2, nombre: "Adidas" },
+    { id: 3, nombre: "Puma" },
+    { id: 4, nombre: "Reebok" },
+    { id: 5, nombre: "Under Armour" }
+];
+
+// Datos de prueba para simular categorías
+const mockCategories = [
+    { id: 1, nombre: "Calzado Deportivo" },
+    { id: 2, nombre: "Ropa Deportiva" },
+    { id: 3, nombre: "Accesorios" },
+    { id: 4, nombre: "Equipamiento" },
+    { id: 5, nombre: "Suplementos" }
+];
+
+// Simulación de respuesta de Cloudinary
+const mockCloudinaryResponse = {
+    secure_url: "https://via.placeholder.com/400x300?text=Producto+Subido"
+};
 
 const CreateProduct = ({ onSubmit }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,12 +70,20 @@ const CreateProduct = ({ onSubmit }) => {
     // Fetch data for select inputs
     const fetchSelectableData = async () => {
         try {
-            const [colorsRes, sizesRes, brandsRes, categoriesRes] = await Promise.all([
-                api.get('/colores/'),
-                api.get('/tallas/'),
-                api.get('/marcas/'),
-                api.get('/categorias/'),
-            ]);
+            // SIMULACIÓN: Reemplazar estas líneas con las peticiones reales cuando estén disponibles
+            // const [colorsRes, sizesRes, brandsRes, categoriesRes] = await Promise.all([
+            //     api.get('/colores/'),
+            //     api.get('/tallas/'),
+            //     api.get('/marcas/'),
+            //     api.get('/categorias/'),
+            // ]);
+
+            // Simulación temporal
+            const colorsRes = { data: mockColors };
+            const sizesRes = { data: mockSizes };
+            const brandsRes = { data: mockBrands };
+            const categoriesRes = { data: mockCategories };
+
             setColors(colorsRes.data);
             setSizes(sizesRes.data);
             setBrands(brandsRes.data);
@@ -81,21 +131,28 @@ const CreateProduct = ({ onSubmit }) => {
             setUploadingImage(true);
 
             try {
-                const response = await fetch('https://api.cloudinary.com/v1_1/dxtic2eyg/image/upload', {
-                    method: 'POST',
-                    body: formData,
-                });
+                // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+                // const response = await fetch('https://api.cloudinary.com/v1_1/dxtic2eyg/image/upload', {
+                //     method: 'POST',
+                //     body: formData,
+                // });
+                // const data = await response.json();
 
-                const data = await response.json();
+                // Simulación temporal - simular subida de imagen
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simular delay de subida
+                const data = mockCloudinaryResponse;
+
                 const imageUrl = data.secure_url;
                 setProductData((prevData) => ({
                     ...prevData,
                     imagen_url: imageUrl,
                 }));
                 setUploadingImage(false);
+                message.success('Imagen subida exitosamente');
             } catch (error) {
                 console.error('Error subiendo la imagen a Cloudinary:', error);
                 setUploadingImage(false);
+                message.error('Error al subir la imagen');
             }
         }
     }, []);
@@ -114,10 +171,26 @@ const CreateProduct = ({ onSubmit }) => {
         };
 
         try {
-            await api.post('/productos/', formattedData);
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // await api.post('/productos/', formattedData);
+
+            // Simulación temporal
+            console.log('Producto creado:', formattedData);
             message.success('Producto creado exitosamente');
             if (onSubmit) onSubmit(formattedData);
             setIsModalOpen(false);
+
+            // Limpiar formulario después de crear
+            setProductData({
+                nombre: '',
+                descripcion: '',
+                precio: '',
+                imagen_url: '',
+                categoria: null,
+                marca: null,
+                colores: [],
+                tallas: [],
+            });
         } catch (error) {
             console.error('Error al crear el producto:', error);
             message.error('Error al crear el producto');

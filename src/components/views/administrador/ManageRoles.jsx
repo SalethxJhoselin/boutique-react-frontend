@@ -1,10 +1,34 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table, Typography } from 'antd';
+import { Button, Input, Space, Table, Typography, notification } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
 import RoleModal from './RoleModal';
 
 const { Title } = Typography;
+
+// Datos de prueba para simular roles
+const mockRoles = [
+  {
+    id: 1,
+    nombre: "Administrador",
+    descripcion: "Acceso completo al sistema"
+  },
+  {
+    id: 2,
+    nombre: "Usuario",
+    descripcion: "Usuario estándar"
+  },
+  {
+    id: 3,
+    nombre: "Moderador",
+    descripcion: "Moderador de contenido"
+  },
+  {
+    id: 4,
+    nombre: "Invitado",
+    descripcion: "Acceso limitado"
+  }
+];
+
 const ManageRoles = () => {
   const [editingRoleId, setEditingRoleId] = useState(null);
   const [editedData, setEditedData] = useState({});
@@ -13,7 +37,9 @@ const ManageRoles = () => {
   // Obtener datos
   const fetchData = async () => {
     try {
-      const rolesData = await api.get("/roles/");
+      // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+      // const rolesData = await api.get("/roles/");
+      const rolesData = { data: mockRoles }; // Simulación temporal
       setRoles(rolesData.data);
     } catch (error) {
       notification.error({ message: 'Error al obtener roles', description: error.message });
@@ -35,11 +61,17 @@ const ManageRoles = () => {
   const handleSaveRole = useCallback(async (roleId) => {
     try {
       console.log("el usuario edito el rol")
-      await api.put(`/roles/${id}/`, {
-        nombre: editedData[roleId]
-      });
-      setRoles(prevRoles => prevRoles.map(role => role.id === roleId ? { ...role, ...editedData[roleId] } : role));
+      // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+      // await api.put(`/roles/${roleId}/`, {
+      //   nombre: editedData[roleId]
+      // });
+
+      // Simulación temporal - actualizar localmente
+      setRoles(prevRoles => prevRoles.map(role =>
+        role.id === roleId ? { ...role, ...editedData[roleId] } : role
+      ));
       setEditingRoleId(null);
+      notification.success({ message: 'Rol actualizado correctamente' });
     } catch (error) {
       notification.error({ message: 'Error al guardar el rol', description: error.message });
     }
@@ -52,10 +84,14 @@ const ManageRoles = () => {
 
   const handleDeleteRole = useCallback(async (roleName) => {
     try {
-      comsole.log('roleNameEEE', roleName)
-      await api.delete(`/marcas/${roleName}/`)
+      console.log('roleNameEEE', roleName)
+      // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+      // await api.delete(`/roles/${roleName}/`)
+
+      // Simulación temporal - eliminar localmente
       console.log("el usuario elimino el rol")
       setRoles(prevRoles => prevRoles.filter(role => role.nombre !== roleName));
+      notification.success({ message: 'Rol eliminado correctamente' });
 
     } catch (error) {
       notification.error({ message: 'Error al eliminar el rol', description: error.message });

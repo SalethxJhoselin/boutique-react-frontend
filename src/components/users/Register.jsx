@@ -4,6 +4,17 @@ import { Link } from 'react-router-dom';
 import api from '../../api/apiServices';
 import { useAuth } from '../../context/AuthContext';
 
+// Datos de prueba para simular respuesta de registro exitoso
+const mockRegisterSuccess = {
+    access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_access_token_register",
+    refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_refresh_token_register"
+};
+
+// Datos de prueba para simular respuesta de error (email ya registrado)
+const mockRegisterError = {
+    email: ["El correo electrónico ya está registrado"]
+};
+
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -15,12 +26,26 @@ const Register = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await api.post("/auth/registro/", {
-                nombre: nombre,
-                email: correo,
-                password: contraseña,
-                roles: [2] 
-            });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.post("/auth/registro/", {
+            //     nombre: nombre,
+            //     email: correo,
+            //     password: contraseña,
+            //     roles: [2] 
+            // });
+
+            // Simulación temporal - validar registro de prueba
+            let response;
+            if (correo === "existente@ejemplo.com") {
+                // Simular error de email ya registrado
+                throw { response: { data: mockRegisterError } };
+            } else if (nombre && correo && contraseña) {
+                // Simular registro exitoso
+                response = { data: mockRegisterSuccess };
+            } else {
+                throw new Error("Todos los campos son requeridos");
+            }
+
             const { access_token, refresh_token } = response.data;
             //const { token } = response.data;
             console.log('token', refresh_token);

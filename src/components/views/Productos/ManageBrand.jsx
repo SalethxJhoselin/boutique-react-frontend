@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
 import InputModal from './InputModal';
+
+// Datos de prueba para simular marcas
+const mockMarcas = [
+    { id: 1, nombre: "Nike" },
+    { id: 2, nombre: "Adidas" },
+    { id: 3, nombre: "Puma" },
+    { id: 4, nombre: "Reebok" },
+    { id: 5, nombre: "Under Armour" },
+    { id: 6, nombre: "New Balance" },
+    { id: 7, nombre: "Asics" }
+];
 
 const ManageBrand = () => {
     const [data, setData] = useState([]);
@@ -9,7 +19,9 @@ const ManageBrand = () => {
 
     const getDatos = async () => {
         try {
-            const response = await api.get("/marcas/");
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.get("/marcas/");
+            const response = { data: mockMarcas }; // Simulación temporal
             console.log(response.data);
             setData(response.data);
         } catch (error) {
@@ -24,44 +36,66 @@ const ManageBrand = () => {
     const handleNameSubmit = async (name) => {
         if (name.nombre && name.nombre.trim() !== "") {
             try {
-                const response = await api.post("/marcas/", { nombre: name.nombre }); // Enviar el nombre en el cuerpo del POST
+                // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+                // const response = await api.post("/marcas/", { nombre: name.nombre });
+
+                // Simulación temporal - agregar marca localmente
+                const newBrand = {
+                    id: data.length > 0 ? Math.max(...data.map(item => item.id)) + 1 : 1,
+                    nombre: name.nombre
+                };
+                setData(prevData => [...prevData, newBrand]);
+
                 console.log("Se creó");
-                console.log(response);
                 getDatos(); // Refrescar la lista de descuentos
             } catch (error) {
                 console.error("No se creó", error.response?.data);
             }
         } else {
-            message.log("El nombre no es válido");
+            console.log("El nombre no es válido");
         }
     };
 
     const handleEdit = (item) => {
-        setEditId(item.id);  
+        setEditId(item.id);
         setEditDescripcion(item.nombre);
     };
 
     const handleSave = async (id) => {
         try {
-            const response = await api.put(`/marcas/${id}/`, {
-                nombre: editDescripcion
-            });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.put(`/marcas/${id}/`, {
+            //     nombre: editDescripcion
+            // });
+
+            // Simulación temporal - actualizar localmente
+            setData(prevData =>
+                prevData.map(item =>
+                    item.id === id ? { ...item, nombre: editDescripcion } : item
+                )
+            );
+
             getDatos();
             setEditId(null);
-            console.log('Actualización exitosa', response);
+            console.log('Actualización exitosa');
         } catch (error) {
-            console.error('Error al actualizar el descuento', error.response.data);
+            console.error('Error al actualizar el descuento', error.response?.data);
         }
     };
 
     const handleDelete = async (id) => {
         try {
-            const response = await api.delete(`/marcas/${id}/`);
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.delete(`/marcas/${id}/`);
+
+            // Simulación temporal - eliminar localmente
+            setData(prevData => prevData.filter(item => item.id !== id));
+
             getDatos();
             setEditId(null);
-            console.log('Eliminacion exitosa', response);
+            console.log('Eliminacion exitosa');
         } catch (error) {
-            console.error('Error al eliminar el descuento', error.response.data);
+            console.error('Error al eliminar el descuento', error.response?.data);
         }
     };
 

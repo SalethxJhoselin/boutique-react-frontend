@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import api from '../../../api/apiServices'; // Asegúrate de importar tu instancia de Axios
 import { useAuth } from '../../../context/AuthContext';
 import { useCart } from '../../../context/CartContext';
+
+// Datos de prueba para simular respuesta de búsqueda registrada
+const mockSearchResponse = {
+  id: 123,
+  usuario: 1,
+  producto: 1,
+  fecha_busqueda: "2024-01-15T10:30:00Z",
+  resultado: "éxito"
+};
 
 const ProductCard = ({ product, onSelect }) => {
   const [quantity, setQuantity] = useState(1); // Estado para manejar la cantidad
@@ -23,8 +31,11 @@ const ProductCard = ({ product, onSelect }) => {
       return;
     }
     try {
-      await api.post('/busquedas/', { usuario: userId, producto: productId });
-      console.log("Búsqueda registrada exitosamente.");
+      // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+      // await api.post('/busquedas/', { usuario: userId, producto: productId });
+
+      // Simulación temporal
+      console.log("Búsqueda registrada exitosamente para el producto:", productId);
     } catch (error) {
       console.error("Error al registrar la búsqueda:", error);
     }

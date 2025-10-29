@@ -1,6 +1,24 @@
 import { useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
 import InputModal from './InputModal';
+
+// Datos de prueba para simular tallas
+const mockTallas = [
+    { id: 1, nombre: "XS" },
+    { id: 2, nombre: "S" },
+    { id: 3, nombre: "M" },
+    { id: 4, nombre: "L" },
+    { id: 5, nombre: "XL" },
+    { id: 6, nombre: "XXL" },
+    { id: 7, nombre: "28" },
+    { id: 8, nombre: "30" },
+    { id: 9, nombre: "32" },
+    { id: 10, nombre: "34" },
+    { id: 11, nombre: "36" },
+    { id: 12, nombre: "38" },
+    { id: 13, nombre: "40" },
+    { id: 14, nombre: "42" },
+    { id: 15, nombre: "Única" }
+];
 
 const ManageSize = () => {
     const [data, setData] = useState([]);
@@ -9,7 +27,9 @@ const ManageSize = () => {
 
     const getDatos = async () => {
         try {
-            const response = await api.get("/tallas/");
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.get("/tallas/");
+            const response = { data: mockTallas }; // Simulación temporal
             console.log("response.data");
             console.log(response.data);
             setData(response.data);
@@ -25,15 +45,23 @@ const ManageSize = () => {
     const handleNameSubmit = async (name) => {
         if (name.nombre && name.nombre.trim() !== "") {
             try {
-                const response = await api.post("/tallas/", {nombre: name.nombre}); // Enviar el nombre en el cuerpo del POST
+                // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+                // const response = await api.post("/tallas/", {nombre: name.nombre});
+
+                // Simulación temporal - agregar talla localmente
+                const newSize = {
+                    id: data.length > 0 ? Math.max(...data.map(item => item.id)) + 1 : 1,
+                    nombre: name.nombre
+                };
+                setData(prevData => [...prevData, newSize]);
+
                 console.log("Se creó");
-                console.log(response);
-                getDatos(); // Refrescar la lista de descuentos
+                getDatos(); // Refrescar la lista de tallas
             } catch (error) {
                 console.error("No se creó", error.response?.data);
             }
         } else {
-            message.log("El nombre no es válido");
+            console.log("El nombre no es válido");
         }
     };
 
@@ -44,31 +72,45 @@ const ManageSize = () => {
 
     const handleSave = async (id) => {
         try {
-            const response = await api.put(`/tallas/${id}/`, {
-                nombre: editDescripcion
-            });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.put(`/tallas/${id}/`, {
+            //     nombre: editDescripcion
+            // });
+
+            // Simulación temporal - actualizar localmente
+            setData(prevData =>
+                prevData.map(item =>
+                    item.id === id ? { ...item, nombre: editDescripcion } : item
+                )
+            );
+
             getDatos();
             setEditId(null);
-            console.log('Actualización exitosa', response);
+            console.log('Actualización exitosa');
         } catch (error) {
-            console.error('Error al actualizar el descuento', error.response.data);
+            console.error('Error al actualizar la talla', error.response?.data);
         }
     };
 
     const handleDelete = async (id) => {
         try {
-            const response = await api.delete(`/tallas/${id}/`);
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.delete(`/tallas/${id}/`);
+
+            // Simulación temporal - eliminar localmente
+            setData(prevData => prevData.filter(item => item.id !== id));
+
             getDatos();
             setEditId(null);
-            console.log('Eliminacion exitosa', response);
+            console.log('Eliminacion exitosa');
         } catch (error) {
-            console.error('Error al eliminar el descuento', error.response.data);
+            console.error('Error al eliminar la talla', error.response?.data);
         }
     };
 
     return (
         <div className="table-container">
-                <h2 className="text-3xl text-center mb-3">Gestionar Tallas</h2>
+            <h2 className="text-3xl text-center mb-3">Gestionar Tallas</h2>
             <InputModal initialValue="size" onSubmit={handleNameSubmit} />
             <table className="discount-table">
                 <thead>
@@ -96,7 +138,7 @@ const ManageSize = () => {
                             <td>
                                 {editId === item.id ? (
                                     <>
-                                    <button onClick={() => handleSave(item.id)}>Guardar</button>
+                                        <button onClick={() => handleSave(item.id)}>Guardar</button>
                                     </>
                                 ) : (
                                     <>

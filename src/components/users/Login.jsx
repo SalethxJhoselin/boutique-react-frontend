@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { MdLock, MdLockOpen } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import api from '../../api/apiServices';
 import { useAuth } from '../../context/AuthContext';
+
+// Datos de prueba para simular respuesta de login exitoso
+const mockLoginSuccess = {
+    access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_access_token",
+    refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_refresh_token"
+};
+
+// Datos de prueba para simular respuesta de error
+const mockLoginError = {
+    error: "Credenciales inválidas",
+    message: "El correo o contraseña son incorrectos"
+};
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -15,28 +26,33 @@ const Login = () => {
         event.preventDefault(); // Evita que el formulario se recargue
         //console.log('entreeeeeeeee');
         try {
-            const response = await api.post("/auth/login/", {
-                email: email,
-                password: password,
-            });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.post("/auth/login/", {
+            //     email: email,
+            //     password: password,
+            // });
+
+            // Simulación temporal - validar credenciales de prueba
+            let response;
+            if (email === "usuario@ejemplo.com" && password === "password123") {
+                response = { data: mockLoginSuccess };
+            } else {
+                throw new Error("Credenciales inválidas");
+            }
+
             const { access_token, refresh_token } = response.data;
             console.log('token', refresh_token);
             localStorage.setItem('token', refresh_token);
             login();
         } catch (error) {
             setErrorMessage('Error al iniciar sesión. Verifica tus credenciales');
-            console.error('Error al iniciar sesión:', error.response.data);
+            console.error('Error al iniciar sesión:', error.response?.data || error.message);
         }
     };
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="w-full max-w-md p-8">
                 <h2 className="text-3xl text-center mb-8">INICIAR SESIÓN</h2>
-                {errorMessage && (
-                    <div className="mb-4 text-center text-red-500 font-bold bg-red-100 border border-red-500 rounded py-2">
-                        {errorMessage}
-                    </div>
-                )}
                 <form className="space-y-8" onSubmit={onSubmit}>
                     <div className="relative border-b border-blue">
                         <input

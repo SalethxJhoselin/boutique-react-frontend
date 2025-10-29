@@ -1,8 +1,28 @@
 import { Button, Input, Modal, Select, Table } from 'antd';
 import { useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
 
 const { Option } = Select;
+
+// Datos de prueba para simular colores
+const mockColores = [
+    { id: 1, nombre: "Negro", categorias: [1, 2] },
+    { id: 2, nombre: "Blanco", categorias: [1, 4] },
+    { id: 3, nombre: "Rojo", categorias: [2, 5] },
+    { id: 4, nombre: "Azul", categorias: [2, 3] },
+    { id: 5, nombre: "Verde", categorias: [2, 6] },
+    { id: 6, nombre: "Gris", categorias: [1, 4] },
+    { id: 7, nombre: "Amarillo", categorias: [5, 6] }
+];
+
+// Datos de prueba para simular categorías de colores
+const mockCategoriasColores = [
+    { id: 1, nombre: "Colores Básicos" },
+    { id: 2, nombre: "Colores Deportivos" },
+    { id: 3, nombre: "Colores de Temporada" },
+    { id: 4, nombre: "Colores Neutros" },
+    { id: 5, nombre: "Colores Vibrantes" },
+    { id: 6, nombre: "Colores Pastel" }
+];
 
 const ManageColor = () => {
     const [data, setData] = useState([]);
@@ -14,7 +34,9 @@ const ManageColor = () => {
 
     const getDatos = async () => {
         try {
-            const response = await api.get("/colores/");
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.get("/colores/");
+            const response = { data: mockColores }; // Simulación temporal
             setData(response.data);
         } catch (error) {
             console.log("Error al obtener los datos", error);
@@ -23,7 +45,9 @@ const ManageColor = () => {
 
     const getCategories = async () => {
         try {
-            const response = await api.get("/categorias-colores/");
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.get("/categorias-colores/");
+            const response = { data: mockCategoriasColores }; // Simulación temporal
             setCategories(response.data);
         } catch (error) {
             console.log("Error al obtener las categorías", error);
@@ -42,11 +66,23 @@ const ManageColor = () => {
     const handleNameSubmit = async () => {
         if (editDescripcion.trim() !== "") {
             try {
-                const response = await api.post("/colores/", {
+                // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+                // const response = await api.post("/colores/", {
+                //     nombre: editDescripcion,
+                //     categorias: selectedCategories,
+                // });
+
+                // Simulación temporal - agregar color localmente
+                const newColor = {
+                    id: data.length > 0 ? Math.max(...data.map(item => item.id)) + 1 : 1,
                     nombre: editDescripcion,
-                    categorias: selectedCategories,
-                });
+                    categorias: selectedCategories
+                };
+                setData(prevData => [...prevData, newColor]);
+
                 setIsModalVisible(false);
+                setEditDescripcion('');
+                setSelectedCategories([]);
                 getDatos();
             } catch (error) {
                 console.error("No se creó", error.response?.data);
@@ -64,26 +100,44 @@ const ManageColor = () => {
 
     const handleSave = async (id) => {
         try {
-            const response = await api.put(`/colores/${id}/`, {
-                nombre: editDescripcion,
-                categorias: selectedCategories,
-            });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.put(`/colores/${id}/`, {
+            //     nombre: editDescripcion,
+            //     categorias: selectedCategories,
+            // });
+
+            // Simulación temporal - actualizar localmente
+            setData(prevData =>
+                prevData.map(item =>
+                    item.id === id
+                        ? { ...item, nombre: editDescripcion, categorias: selectedCategories }
+                        : item
+                )
+            );
+
             getDatos();
             setEditId(null);
-            console.log('Actualización exitosa', response);
+            setEditDescripcion('');
+            setSelectedCategories([]);
+            console.log('Actualización exitosa');
         } catch (error) {
-            console.error('Error al actualizar el color', error.response.data);
+            console.error('Error al actualizar el color', error.response?.data);
         }
     };
 
     const handleDelete = async (id) => {
         try {
-            const response = await api.delete(`/colores/${id}/`);
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.delete(`/colores/${id}/`);
+
+            // Simulación temporal - eliminar localmente
+            setData(prevData => prevData.filter(item => item.id !== id));
+
             getDatos();
             setEditId(null);
-            console.log('Eliminación exitosa', response);
+            console.log('Eliminación exitosa');
         } catch (error) {
-            console.error('Error al eliminar el color', error.response.data);
+            console.error('Error al eliminar el color', error.response?.data);
         }
     };
 

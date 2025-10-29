@@ -1,7 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Input, message, Modal } from 'antd';
 import { useState } from 'react';
-import api from '../../../api/apiServices';
 
 const RoleModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +9,10 @@ const RoleModal = ({ getDatos }) => {
 
     const handleOk = async () => {
         try {
-            await api.post("/roles/", { nombre: roleName });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // await api.post("/roles/", { nombre: roleName });
+
+            // Simulación temporal - crear rol localmente
             console.log(`el usuario x creo el rol: ${roleName}`);
             setIsModalOpen(false);
             setRoleName('');
@@ -18,7 +20,7 @@ const RoleModal = ({ getDatos }) => {
             messageApi.success('Rol guardado exitosamente');
         } catch (error) {
             console.error('Error al crear el rooool:', error);
-            messageApi.success('Error al guardar el rol');
+            messageApi.error('Error al guardar el rol');
         }
     };
 

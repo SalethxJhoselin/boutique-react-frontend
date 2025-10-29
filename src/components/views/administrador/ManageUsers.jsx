@@ -1,8 +1,60 @@
 import { Button, Select, Space, Table, Typography, notification } from 'antd';
 import { useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
 
 const { Title } = Typography;
+
+// Datos de prueba para simular usuarios
+const mockUsers = [
+    {
+        id: 1,
+        nombre: "Ana García",
+        email: "ana.garcia@ejemplo.com",
+        roles: [1, 2]
+    },
+    {
+        id: 2,
+        nombre: "Carlos López",
+        email: "carlos.lopez@ejemplo.com",
+        roles: [2]
+    },
+    {
+        id: 3,
+        nombre: "María Rodríguez",
+        email: "maria.rodriguez@ejemplo.com",
+        roles: [3]
+    },
+    {
+        id: 4,
+        nombre: "Pedro Martínez",
+        email: "pedro.martinez@ejemplo.com",
+        roles: [2, 3]
+    },
+    {
+        id: 5,
+        nombre: "Laura Fernández",
+        email: "laura.fernandez@ejemplo.com",
+        roles: [1]
+    }
+];
+
+// Datos de prueba para simular roles
+const mockRoles = [
+    {
+        id: 1,
+        nombre: "Administrador",
+        descripcion: "Acceso completo al sistema"
+    },
+    {
+        id: 2,
+        nombre: "Usuario",
+        descripcion: "Usuario estándar"
+    },
+    {
+        id: 3,
+        nombre: "Moderador",
+        descripcion: "Moderador de contenido"
+    }
+];
 
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
@@ -13,10 +65,16 @@ const ManageUsers = () => {
     // Obtener usuarios registrados y roles disponibles
     const fetchUsersAndRoles = async () => {
         try {
-            const [usersData, rolesData] = await Promise.all([
-                api.get("/usuarios/"),
-                api.get("/roles/")
-            ]);
+            // SIMULACIÓN: Reemplazar estas líneas con las peticiones reales cuando estén disponibles
+            // const [usersData, rolesData] = await Promise.all([
+            //     api.get("/usuarios/"),
+            //     api.get("/roles/")
+            // ]);
+
+            // Simulación temporal
+            const usersData = { data: mockUsers };
+            const rolesData = { data: mockRoles };
+
             setUsers(usersData.data);
             setRoles(rolesData.data);
         } catch (error) {
@@ -39,15 +97,17 @@ const ManageUsers = () => {
         }
 
         try {
-            const payload = { rol_ids: selectedRoleIds }; // Payload con múltiples roles
-            await api.post(`/usuarios/${userId}/actualizar_roles/`, payload);
-            notification.success({ message: 'Roles asignados correctamente.' });
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const payload = { rol_ids: selectedRoleIds }; // Payload con múltiples roles
+            // await api.post(`/usuarios/${userId}/actualizar_roles/`, payload);
 
-            // Actualizar la lista de usuarios con los nuevos roles asignados
+            // Simulación temporal - actualizar localmente
             const updatedUsers = users.map(user =>
                 user.id === userId ? { ...user, roles: selectedRoleIds } : user
             );
             setUsers(updatedUsers);
+
+            notification.success({ message: 'Roles asignados correctamente.' });
 
             // Salir del modo de edición
             setEditingUserId(null);

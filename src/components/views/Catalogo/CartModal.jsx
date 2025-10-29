@@ -1,9 +1,32 @@
 import jsPDF from 'jspdf'; // Importa la librería para generar PDFs
 import 'jspdf-autotable'; // Plugin para tablas en jsPDF
 import { useNavigate } from 'react-router-dom';
-import api from '../../../api/apiServices'; // Asegúrate de importar tu instancia de Axios
 import { useAuth } from '../../../context/AuthContext'; // Para obtener el userId
 import { useCart } from '../../../context/CartContext';
+
+// Datos de prueba para simular respuesta de nota de venta
+const mockNotaVentaResponse = {
+    id: 12345,
+    numero_venta: "NV-2024-001",
+    fecha: "2024-01-15T10:30:00Z",
+    usuario: 1,
+    observacion: "Compra a través de Stripe",
+    total: 189.97,
+    detalles: [
+        {
+            producto: 1,
+            cantidad: 2,
+            precio_unitario: 89.99,
+            subtotal: 179.98
+        },
+        {
+            producto: 4,
+            cantidad: 1,
+            precio_unitario: 9.99,
+            subtotal: 9.99
+        }
+    ]
+};
 
 const CartModal = ({ onClose }) => {
     const { cart, clearCart } = useCart(); // Accede a los productos en el carrito
@@ -28,8 +51,10 @@ const CartModal = ({ onClose }) => {
         };
 
         try {
-            // Enviar la solicitud al backend
-            const response = await api.post('/notas-venta/', purchaseData);
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.post('/notas-venta/', purchaseData);
+            const response = { data: mockNotaVentaResponse }; // Simulación temporal
+
             console.log("Nota de venta registrada exitosamente:", response.data);
 
             // Generar el PDF con los detalles de la nota de venta

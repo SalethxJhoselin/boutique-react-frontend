@@ -1,6 +1,70 @@
 import { Table } from 'antd';
 import { useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
+
+// Datos de prueba para simular notas de venta
+const mockNotasVenta = [
+    {
+        id: 1,
+        fecha: "2024-01-15T10:30:00Z",
+        observacion: "Compra online - Cliente frecuente",
+        usuario: 1,
+        total: 189.97
+    },
+    {
+        id: 2,
+        fecha: "2024-01-14T14:20:00Z",
+        observacion: "Venta en tienda física",
+        usuario: 2,
+        total: 75.50
+    },
+    {
+        id: 3,
+        fecha: "2024-01-13T16:45:00Z",
+        observacion: "Compra con descuento promocional",
+        usuario: 3,
+        total: 120.25
+    },
+    {
+        id: 4,
+        fecha: "2024-01-12T09:15:00Z",
+        observacion: "Pedido corporativo",
+        usuario: 4,
+        total: 350.80
+    },
+    {
+        id: 5,
+        fecha: "2024-01-11T11:30:00Z",
+        observacion: "Compra mayorista",
+        usuario: 5,
+        total: 520.45
+    }
+];
+
+// Datos de prueba para simular detalles de venta
+const mockDetallesVenta = [
+    // Detalles para nota de venta 1
+    { id: 1, nota_venta: 1, producto: 1, cantidad: 2, precio_unitario: 89.99 },
+    { id: 2, nota_venta: 1, producto: 4, cantidad: 1, precio_unitario: 9.99 },
+
+    // Detalles para nota de venta 2
+    { id: 3, nota_venta: 2, producto: 2, cantidad: 1, precio_unitario: 29.99 },
+    { id: 4, nota_venta: 2, producto: 3, cantidad: 1, precio_unitario: 24.99 },
+    { id: 5, nota_venta: 2, producto: 4, cantidad: 2, precio_unitario: 12.99 },
+
+    // Detalles para nota de venta 3
+    { id: 6, nota_venta: 3, producto: 1, cantidad: 1, precio_unitario: 89.99 },
+    { id: 7, nota_venta: 3, producto: 5, cantidad: 1, precio_unitario: 45.99 },
+
+    // Detalles para nota de venta 4
+    { id: 8, nota_venta: 4, producto: 2, cantidad: 5, precio_unitario: 29.99 },
+    { id: 9, nota_venta: 4, producto: 3, cantidad: 3, precio_unitario: 24.99 },
+    { id: 10, nota_venta: 4, producto: 4, cantidad: 10, precio_unitario: 12.99 },
+
+    // Detalles para nota de venta 5
+    { id: 11, nota_venta: 5, producto: 1, cantidad: 4, precio_unitario: 89.99 },
+    { id: 12, nota_venta: 5, producto: 2, cantidad: 3, precio_unitario: 29.99 },
+    { id: 13, nota_venta: 5, producto: 5, cantidad: 2, precio_unitario: 45.99 }
+];
 
 const NotaVentas = () => {
     const [notas, setNotas] = useState([]); // Para almacenar las notas de venta
@@ -11,8 +75,14 @@ const NotaVentas = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const notasResponse = await api.get('/notas-venta/');
-                const detallesResponse = await api.get('/detalles-venta/');
+                // SIMULACIÓN: Reemplazar estas líneas con las peticiones reales cuando estén disponibles
+                // const notasResponse = await api.get('/notas-venta/');
+                // const detallesResponse = await api.get('/detalles-venta/');
+
+                // Simulación temporal
+                const notasResponse = { data: mockNotasVenta };
+                const detallesResponse = { data: mockDetallesVenta };
+
                 setNotas(notasResponse.data);
                 setDetalles(detallesResponse.data);
 

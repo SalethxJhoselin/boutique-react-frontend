@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
-import api from '../../api/apiServices'; // Importa tu instancia de Axios para las solicitudes
 import { useAuth } from '../../context/AuthContext';
+
+// Datos de prueba para simular respuesta del perfil de usuario
+const mockUserData = {
+  id: 123,
+  nombre: "Juan Pérez",
+  email: "juan.perez@ejemplo.com",
+  roles: [2, "usuario"],
+  fecha_registro: "2024-01-15",
+  telefono: "+34 612 345 678",
+  direccion: "Calle Principal 123, Madrid"
+};
 
 const UserProfile = () => {
   const { userId } = useAuth(); // Acceder al ID del usuario desde el contexto
@@ -11,7 +21,10 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await api.get(`/usuarios/${userId}/`); // Realiza la solicitud al endpoint del usuario
+        // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+        // const response = await api.get(`/usuarios/${userId}/`);
+        const response = { data: mockUserData }; // Simulación temporal
+
         setUserData(response.data);
       } catch (err) {
         console.error('Error fetching user data:', err);
@@ -43,6 +56,9 @@ const UserProfile = () => {
           <p><strong>Nombre:</strong> {userData.nombre}</p>
           <p><strong>Email:</strong> {userData.email}</p>
           <p><strong>Roles:</strong> {userData.roles.join(', ')}</p>
+          {userData.telefono && <p><strong>Teléfono:</strong> {userData.telefono}</p>}
+          {userData.direccion && <p><strong>Dirección:</strong> {userData.direccion}</p>}
+          {userData.fecha_registro && <p><strong>Fecha de registro:</strong> {userData.fecha_registro}</p>}
         </>
       ) : (
         <p>No se encontraron datos del usuario.</p>

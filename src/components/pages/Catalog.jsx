@@ -1,8 +1,125 @@
 import { useEffect, useState } from 'react';
-import api from '../../api/apiServices'; // Importa la instancia configurada de Axios
 import { useAuth } from '../../context/AuthContext';
 import ProductDetail from '../views/Catalogo/ProductDetail';
 import ProductList from '../views/Catalogo/ProductList';
+
+// Datos de prueba para simular respuestas del servicio
+const mockRecommendations = {
+  exactas: [
+    {
+      id: 1,
+      nombre: "Zapatillas Running Pro",
+      precio: "89.99",
+      categoria: "Calzado Deportivo",
+      imagen: "https://via.placeholder.com/150",
+      stock: 15
+    },
+    {
+      id: 2,
+      nombre: "Camiseta Deportiva",
+      precio: "29.99",
+      categoria: "Ropa Deportiva",
+      imagen: "https://via.placeholder.com/150",
+      stock: 25
+    }
+  ],
+  flexibles: [
+    {
+      id: 3,
+      nombre: "Short Deportivo",
+      precio: "24.99",
+      categoria: "Ropa Deportiva",
+      imagen: "https://via.placeholder.com/150",
+      stock: 30
+    }
+  ],
+  complementarios: [
+    {
+      id: 4,
+      nombre: "Medias Deportivas",
+      precio: "12.99",
+      categoria: "Accesorios",
+      imagen: "https://via.placeholder.com/150",
+      stock: 50
+    },
+    {
+      id: 5,
+      nombre: "Mochila Deportiva",
+      precio: "45.99",
+      categoria: "Accesorios",
+      imagen: "https://via.placeholder.com/150",
+      stock: 10
+    }
+  ]
+};
+
+const mockProducts = [
+  {
+    id: 1,
+    nombre: "Zapatillas Running Pro",
+    precio: "89.99",
+    descripcion: "Zapatillas profesionales para running con amortiguación avanzada",
+    categoria: "Calzado Deportivo",
+    marca: "SportBrand",
+    colores: ["Negro", "Azul", "Rojo"],
+    tallas: ["38", "39", "40", "41", "42"],
+    stock: 15,
+    fecha_agregado: "2024-01-15",
+    imagen_url: "https://via.placeholder.com/150"
+  },
+  {
+    id: 2,
+    nombre: "Camiseta Deportiva",
+    precio: "29.99",
+    descripcion: "Camiseta técnica para entrenamiento con tecnología dry-fit",
+    categoria: "Ropa Deportiva",
+    marca: "ActiveWear",
+    colores: ["Blanco", "Negro", "Gris"],
+    tallas: ["S", "M", "L", "XL"],
+    stock: 25,
+    fecha_agregado: "2024-01-10",
+    imagen_url: "https://via.placeholder.com/150"
+  },
+  {
+    id: 3,
+    nombre: "Short Deportivo",
+    precio: "24.99",
+    descripcion: "Short ligero para actividades deportivas",
+    categoria: "Ropa Deportiva",
+    marca: "FitGear",
+    colores: ["Azul marino", "Rojo", "Verde"],
+    tallas: ["S", "M", "L", "XL"],
+    stock: 30,
+    fecha_agregado: "2024-01-08",
+    imagen_url: "https://via.placeholder.com/150"
+  },
+  {
+    id: 4,
+    nombre: "Medias Deportivas",
+    precio: "12.99",
+    descripcion: "Medias técnicas con soporte para el arco plantar",
+    categoria: "Accesorios",
+    marca: "ComfortSock",
+    colores: ["Blanco", "Negro", "Gris"],
+    tallas: ["Única"],
+    stock: 50,
+    fecha_agregado: "2024-01-05",
+    imagen_url: "https://via.placeholder.com/150"
+  },
+  {
+    id: 5,
+    nombre: "Mochila Deportiva",
+    precio: "45.99",
+    descripcion: "Mochila resistente al agua con compartimento para laptop",
+    categoria: "Accesorios",
+    marca: "OutdoorGear",
+    colores: ["Negro", "Azul", "Verde"],
+    tallas: ["Única"],
+    stock: 10,
+    fecha_agregado: "2024-01-12",
+    imagen_url: "https://via.placeholder.com/150"
+  }
+];
 
 const Catalog = () => {
   const { userId } = useAuth();
@@ -18,7 +135,9 @@ const Catalog = () => {
         let response;
         if (userId) {
           // Si el userId no es nulo, cargar las recomendaciones personalizadas
-          response = await api.post(`/recomendaciones/${userId}/`);
+          // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+          // response = await api.post(`/recomendaciones/${userId}/`);
+          response = { data: mockRecommendations }; // Simulación temporal
           console.log("Recomendaciones", response.data);
 
           // Combinar exactas, flexibles y complementarios
@@ -42,7 +161,9 @@ const Catalog = () => {
           );
         } else {
           // Si el userId es nulo, cargar los productos del catálogo general
-          response = await api.get('/productos/');
+          // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+          // response = await api.get('/productos/');
+          response = { data: mockProducts }; // Simulación temporal
           console.log("Productos", response);
 
           // Mapear los productos a la estructura esperada por el frontend

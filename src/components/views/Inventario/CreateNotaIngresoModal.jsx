@@ -1,8 +1,67 @@
 import { Button, Input, Modal, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import api from '../../../api/apiServices';
 
 const { Option } = Select;
+
+// Datos de prueba para simular productos
+const mockProductos = [
+    {
+        id: 1,
+        nombre: "Zapatillas Running Pro",
+        precio: "89.99",
+        categoria: "Calzado Deportivo",
+        stock: 15
+    },
+    {
+        id: 2,
+        nombre: "Camiseta Deportiva",
+        precio: "29.99",
+        categoria: "Ropa Deportiva",
+        stock: 25
+    },
+    {
+        id: 3,
+        nombre: "Short Deportivo",
+        precio: "24.99",
+        categoria: "Ropa Deportiva",
+        stock: 30
+    },
+    {
+        id: 4,
+        nombre: "Medias Deportivas",
+        precio: "12.99",
+        categoria: "Accesorios",
+        stock: 50
+    },
+    {
+        id: 5,
+        nombre: "Mochila Deportiva",
+        precio: "45.99",
+        categoria: "Accesorios",
+        stock: 10
+    }
+];
+
+// Datos de prueba para simular respuesta de nota de ingreso
+const mockNotaIngresoResponse = {
+    id: 1001,
+    numero_ingreso: "NI-2024-001",
+    fecha: "2024-01-15T10:30:00Z",
+    observacion: "Ingreso de productos deportivos",
+    total_productos: 5,
+    detalles: [
+        {
+            producto: 1,
+            cantidad: 10,
+            precio_unitario: 89.99
+        },
+        {
+            producto: 2,
+            cantidad: 20,
+            precio_unitario: 29.99
+        }
+    ]
+};
 
 function CreateNotaIngresoModal({ visible, closeModal, refreshNotas }) {
     const [productos, setProductos] = useState([]);
@@ -17,7 +76,9 @@ function CreateNotaIngresoModal({ visible, closeModal, refreshNotas }) {
 
     const fetchProductos = async () => {
         try {
-            const response = await api.get('/productos/');
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // const response = await api.get('/productos/');
+            const response = { data: mockProductos }; // Simulación temporal
             setProductos(response.data);
         } catch (error) {
             console.error('Error al obtener los productos:', error);
@@ -66,9 +127,18 @@ function CreateNotaIngresoModal({ visible, closeModal, refreshNotas }) {
                 detalles: nota.detalles,
             };
 
-            await api.post('/notas-ingreso/', data);
+            // SIMULACIÓN: Reemplazar esta línea con la petición real cuando esté disponible
+            // await api.post('/notas-ingreso/', data);
+            console.log("Nota de ingreso creada exitosamente:", data); // Simulación temporal
+
             refreshNotas(); // Refrescar la lista de notas en el componente principal
             closeModal(); // Cerrar el modal
+
+            // Limpiar el formulario después de crear
+            setNota({
+                observacion: '',
+                detalles: [],
+            });
         } catch (error) {
             console.error('Error al crear la nota de ingreso:', error);
         }
